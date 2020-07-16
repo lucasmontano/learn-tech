@@ -18,7 +18,6 @@ https://www.twitch.tv/lucas_montano
 - Avoid big Pull Requests and split your work properly
 
 ## How to Run 
-- [Install the Flutter Framework on your machine](https://flutter.dev/docs/get-started/install), if it is not already installed
-- Make a new Android Virtual Device (AVD) and configure it. Here is a [guide](https://developer.android.com/studio/run/managing-avds?hl=pt-br) to do this
-- If you want to run in a physical device, follow [this steps](https://developer.android.com/studio/run/managing-avds?hl=pt-br)
-- Then, in the path of application, just open a new Terminal or Poweshell and type "flutter run"
+- [Install the Flutter Framework](https://flutter.dev/docs/get-started/install) on your machine, if it is not already installed
+- [Make a new Android Virtual Device (AVD)](https://developer.android.com/studio/run/managing-avds?hl=pt-br) and configure it or, if you want to run it in a physical device, follow [this steps](https://developer.android.com/studio/run/managing-avds?hl=pt-br)
+- Then, in the folder of the project, just open a new Terminal or Poweshell and type "flutter run"
