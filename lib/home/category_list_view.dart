@@ -4,6 +4,8 @@ import 'package:learntech/store/questcategory_store.dart';
 import 'package:provider/provider.dart';
 
 class CategoryListView extends StatelessWidget {
+  CategoryListView() : super();
+
   @override
   Widget build(BuildContext context) {
     return Observer(
