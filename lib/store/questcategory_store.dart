@@ -27,9 +27,13 @@ abstract class _QuestCategoryStore with Store {
   @action
   Future<void> _loadCategories() async {
     categories.clear();
-    Firestore.instance.collection('categories').snapshots().listen((data) =>
-        data.documents.forEach((doc) =>
-            categories.add(QuestCategory(description: doc["description"]))));
+
+    Firestore.instance.collection('categories').getDocuments().then((event) {
+      if (event.documents.isNotEmpty) {
+        event.documents.forEach((doc) =>
+            categories.add(QuestCategory(description: doc["description"])));
+      }
+    }).catchError((e) => print("error fetching data: $e"));
   }
 
   Future<void> init() async {
