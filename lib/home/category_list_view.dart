@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:learntech/quests/quest_screen.dart';
 import 'package:learntech/store/questcategory_store.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +20,16 @@ class CategoryListView extends StatelessWidget {
             final category = categories[index];
 
             return ListTile(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) {
+                      return QuestScreen(category);
+                    },
+                  ),
+                );
+              },
               title: Observer(
                 builder: (context) => Text(category.description),
               ),

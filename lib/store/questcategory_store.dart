@@ -30,8 +30,8 @@ abstract class _QuestCategoryStore with Store {
 
     Firestore.instance.collection('categories').getDocuments().then((event) {
       if (event.documents.isNotEmpty) {
-        event.documents.forEach((doc) =>
-            categories.add(QuestCategory(description: doc["description"])));
+        event.documents.forEach((doc) => categories.add(QuestCategory(
+            id: doc.documentID, description: doc["description"])));
       }
     }).catchError((e) => print("error fetching data: $e"));
   }
