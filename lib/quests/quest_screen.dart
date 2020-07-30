@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart' hide Action;
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:learntech/models/quest_category.dart';
+import 'package:learntech/quests/quest_card_view.dart';
+import 'package:learntech/store/quest_store.dart';
 import 'package:learntech/store/questlevel_store.dart';
 import 'package:mobx/mobx.dart';
-import 'package:provider/provider.dart';
 
 class QuestScreen extends StatefulWidget {
   const QuestScreen(this.category);
@@ -15,17 +16,20 @@ class QuestScreen extends StatefulWidget {
 }
 
 class _QuestScreenState extends State<QuestScreen> {
-  final store = QuestLevelStore();
+  final questLevelStore = QuestLevelStore();
+  final questStore = QuestStore();
 
   @override
   void initState() {
-    store.init(widget.category);
+    questLevelStore.init(widget.category);
+    questStore.init(widget.category);
     super.initState();
   }
 
   @override
   void dispose() {
-    store.dispose();
+    questLevelStore.dispose();
+    questStore.dispose();
     super.dispose();
   }
 
@@ -34,17 +38,26 @@ class _QuestScreenState extends State<QuestScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Observer(builder: (context) {
-          if (store.loader.status == FutureStatus.pending) {
+          if (questLevelStore.loader.status == FutureStatus.pending) {
             return Center(
               child: CircularProgressIndicator(),
             );
           }
-          return Text(store.basicLevel.description);
+          return Text(questLevelStore.basicLevel.description);
         }),
-        // TODO body: Add CardWidget showing the first Quest of this level
-        // TODO body: Add AnswersListView
-        // TODO body: Add Complete button to evaluate and go to next quest
       ),
+      body: Observer(builder: (context) {
+        final loaderStatus = questStore.questLoader?.status;
+        if (loaderStatus == null || loaderStatus == FutureStatus.pending) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (questStore.allQuests?.isNotEmpty == true) {
+          return QuestCardView(questStore.allQuests.first);
+        } else {
+          return Text("Loading...");
+        }
+      }),
     );
   }
 }

@@ -13,7 +13,7 @@ abstract class _QuestStore with Store {
   _QuestStore({
     ObservableList<Quest> quests,
     this.filter = VisibilityFilter.all,
-  }) : quests = quests ?? ObservableList<_QuestStore>();
+  }) : quests = quests ?? ObservableList<Quest>();
 
   final ObservableList<Quest> quests;
   ReactionDisposer _disposeSaveReaction;
@@ -22,7 +22,10 @@ abstract class _QuestStore with Store {
   VisibilityFilter filter;
 
   @observable
-  ObservableFuture<void> loader;
+  ObservableFuture<void> questLoader;
+
+  @observable
+  ObservableFuture<void> answersLoader;
 
   @computed
   List<Quest> get allQuests => quests.toList(growable: false);
@@ -49,12 +52,12 @@ abstract class _QuestStore with Store {
   }
 
   @action
-  Future<void> _loadQuests(QuestCategory category, QuestLevel level) async {
+  Future<void> _loadQuests(QuestCategory category) async {
     quests.clear();
 
+    // TODO load quests according to current level
     Firestore.instance
-        .collection(
-            'categories/' + category.id + '/levels/' + level.id + '/quests')
+        .collection('categories/' + category.id + '/levels/basic/quests')
         .getDocuments()
         .then((event) {
       if (event.documents.isNotEmpty) {
@@ -66,10 +69,16 @@ abstract class _QuestStore with Store {
     }).catchError((e) => print("error fetching data: $e"));
   }
 
-  Future<void> init(QuestCategory category, QuestLevel level) async {
-    loader = ObservableFuture(_loadQuests(category, level));
+  Future<void> init(QuestCategory category) async {
+    questLoader = ObservableFuture(_loadQuests(category));
 
-    await loader;
+    await questLoader;
+  }
+
+  Future<void> loadAnswers(Quest quest) async {
+    answersLoader = ObservableFuture(_loadAnswers(quest));
+
+    await answersLoader;
   }
 
   void dispose() => _disposeSaveReaction();
