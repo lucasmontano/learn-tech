@@ -31,20 +31,23 @@ abstract class _QuestStore with Store {
   List<Quest> get allQuests => quests.toList(growable: false);
 
   @action
-  Future<void> _loadAnswers(Quest quest) {
-    print("loading answers for: $quest.id");
+  Future<void> _loadAnswers(QuestCategory category, Quest quest) {
+    print("loading answers on category: " + category.id);
+    print("loading answers on quest: " + quest.id);
     Firestore.instance
-        .collection('quests')
-        .document(quest.id)
-        .collection('answers')
+        .collection('categories/' +
+            category.id +
+            '/levels/basic/quests/' +
+            quest.id +
+            '/answers')
         .getDocuments()
         .then((event) {
       if (event.documents.isNotEmpty) {
         List<QuestAnswer> answers = List(0);
         event.documents.forEach((doc) => answers.add(QuestAnswer(
             id: doc.documentID,
-            description: doc.data["description"],
-            isRight: doc.data["isRight"])));
+            description: doc["description"],
+            isRight: doc["isRight"])));
 
         quests.firstWhere((element) => element.id == quest.id).answers =
             answers;
@@ -76,8 +79,8 @@ abstract class _QuestStore with Store {
     await questLoader;
   }
 
-  Future<void> loadAnswers(Quest quest) async {
-    answersLoader = ObservableFuture(_loadAnswers(quest));
+  Future<void> loadAnswers(QuestCategory category, Quest quest) async {
+    answersLoader = ObservableFuture(_loadAnswers(category, quest));
 
     await answersLoader;
   }

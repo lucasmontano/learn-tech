@@ -72,11 +72,11 @@ mixin _$QuestStore on _QuestStore, Store {
   final _$_QuestStoreActionController = ActionController(name: '_QuestStore');
 
   @override
-  Future<void> _loadAnswers(Quest quest) {
+  Future<void> _loadAnswers(QuestCategory category, Quest quest) {
     final _$actionInfo = _$_QuestStoreActionController.startAction(
         name: '_QuestStore._loadAnswers');
     try {
-      return super._loadAnswers(quest);
+      return super._loadAnswers(category, quest);
     } finally {
       _$_QuestStoreActionController.endAction(_$actionInfo);
     }

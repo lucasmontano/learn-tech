@@ -58,7 +58,7 @@ class _QuestScreenState extends State<QuestScreen> {
           if (quest.answers?.isNotEmpty == true) {
             return QuestCardView(quest);
           } else if (questStore.answersLoader != FutureStatus.pending) {
-            questStore.loadAnswers(quest);
+            questStore.loadAnswers(widget.category, quest);
           }
           return Center(
             child: CircularProgressIndicator(
