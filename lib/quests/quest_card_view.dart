@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:learntech/models/quest.dart';
+import 'package:learntech/quests/answer_list_view.dart';
 
 class QuestCardView extends StatelessWidget {
   const QuestCardView(this.quest);
@@ -27,12 +28,14 @@ class QuestCardView extends StatelessWidget {
                       child: Text(quest.description),
                     ),
                   ),
+                  Expanded(
+                    child: AnswerListView(quest.answers),
+                  ),
                   Padding(
                       padding: EdgeInsets.fromLTRB(20, 10.0, 20.0, 20.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: <Widget>[
-                          // TODO display answers
                           SizedBox(
                             width: double.infinity,
                             // height: double.infinity,

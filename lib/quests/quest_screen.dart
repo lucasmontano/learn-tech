@@ -50,10 +50,20 @@ class _QuestScreenState extends State<QuestScreen> {
         final loaderStatus = questStore.questLoader?.status;
         if (loaderStatus == null || loaderStatus == FutureStatus.pending) {
           return Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation(Colors.blue)),
           );
         } else if (questStore.allQuests?.isNotEmpty == true) {
-          return QuestCardView(questStore.allQuests.first);
+          var quest = questStore.allQuests.first;
+          if (quest.answers?.isNotEmpty == true) {
+            return QuestCardView(quest);
+          } else if (questStore.answersLoader != FutureStatus.pending) {
+            questStore.loadAnswers(quest);
+          }
+          return Center(
+            child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation(Colors.red)),
+          );
         } else {
           return Text("Loading...");
         }

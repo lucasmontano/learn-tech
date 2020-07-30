@@ -32,6 +32,7 @@ abstract class _QuestStore with Store {
 
   @action
   Future<void> _loadAnswers(Quest quest) {
+    print("loading answers for: $quest.id");
     Firestore.instance
         .collection('quests')
         .document(quest.id)
@@ -42,8 +43,8 @@ abstract class _QuestStore with Store {
         List<QuestAnswer> answers = List(0);
         event.documents.forEach((doc) => answers.add(QuestAnswer(
             id: doc.documentID,
-            description: doc["description"],
-            isRight: doc["isRight"])));
+            description: doc.data["description"],
+            isRight: doc.data["isRight"])));
 
         quests.firstWhere((element) => element.id == quest.id).answers =
             answers;
